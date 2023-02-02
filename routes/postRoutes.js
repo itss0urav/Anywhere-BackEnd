@@ -1,7 +1,9 @@
 const router = require("express").Router()
-const {createPost} = require("../controllers/postController")
+const {createPost, upVotePost} = require("../controllers/postController")
 
-router.route("/").post(createPost)
+router.route("/")
+.post(createPost)
+.patch(upVotePost)
 
 
 module.exports = router
