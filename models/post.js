@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 //Post schema
-
 const postModel = new mongoose.Schema({
 
     userId:{
@@ -14,13 +13,9 @@ const postModel = new mongoose.Schema({
     description:{
         type:String
     },
-    upVotes:{
-        type:Number,
-        default:0
-    },
-    downVotes:{
-        type:Number,
-        default:0
+    vote:{
+        type:[mongoose.Types.ObjectId],
+        ref:"Vote"
     },
     comments:[{
         type:[mongoose.Types.ObjectId],

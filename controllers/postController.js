@@ -1,4 +1,5 @@
 const Post = require("../models/post");
+const Vote = require("../models/vote");
 const asyncHandler = require("express-async-handler");
 
 //@desc creating a new post
@@ -18,28 +19,67 @@ const createPost = asyncHandler(async (req, res) => {
 
   const response = await Post.create(postObj);
   if (!response) return res.status(500).send("Something went wrong");
-
+  const vote = await Vote.create({postId:response._id,vote:0,userId:[]})
   return res.status(200).json(response);
 });
 
-//@desc Upvoting post
+//@desc Updating a post
 //@access Protected
 //@route /post
-const upVotePost = asyncHandler(async (req, res) => {
-  const { postId } = req.body;
-  const post = await Post.findOne({ _id: postId });
-  let upVotes = post.upVotes;
-  const response = await Post.findOneAndUpdate(
-    { _id: postId },
-    {
-      upVotes: upVotes + 1,
-    },
-    { new: true }
-  );
+//@method PATCH
 
-  if (!response) return res.status(404).send("Something wend wrong");
+const updatePost = asyncHandler(async (req, res) => {
+  const { title, description, postId } = req.body;
+  let result;
+  //Sanitizing
+  if (!title && !description) {
+    return res.status(401).send("Please send atleast one parameter");
+  }
 
-  return res.status(200).json(response);
+  //When both title and description need to be updated
+  if (title && description) {
+    result = await Post.findOneAndUpdate(
+      { _id: postId },
+      {
+        title,
+        description,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!result) return res.status(500).send("Something went wrong");
+  }
+
+  //when only description need to be updated
+  if (!title && description) {
+    result = await Post.findOneAndUpdate(
+      { _id: postId },
+      {
+        description,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!result) return res.status(500).send("Something went wrong");
+  }
+
+  //when only title need to be updated
+  if (title && !description) {
+    result = await Post.findOneAndUpdate(
+      { _id: postId },
+      {
+        title,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!result) return res.status(500).send("Something went wrong");
+  }
+
+  return res.status(200).send(result)
 });
 
-module.exports = { createPost, upVotePost };
+module.exports = { createPost, updatePost };
