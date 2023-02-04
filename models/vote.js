@@ -9,7 +9,7 @@ const voteModel = new mongoose.Schema({
         ref:"User"
     }],
     vote:{
-        type:number
+        type:Number
     },
     postId:{
         type:mongoose.Types.ObjectId,

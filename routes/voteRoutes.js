@@ -1,4 +1,6 @@
 const router = require("express").Router()
+const {upVotePost} = require("../controllers/voteController")
 
+router.patch("/",upVotePost)
 
-router.patch()
+module.exports  = router
