@@ -5,11 +5,16 @@ const mongoose = require("mongoose");
 const { connectDb } = require("./configs/db");
 const postRoutes = require("./routes/postRoutes")
 const voteRoutes = require("./routes/voteRoutes")
+const cors = require("cors")
+const corsOptions = require("./configs/authorization/corsOptions")
+const cookieParser = require("cookie-parser")
 require("dotenv").config();
 const PORT = process.env.PORT || 5000;
 
+app.use(cors(corsOptions))
 //Routes
 connectDb();
+app.use(cookieParser())
 app.use(express.json())
 app.use("/auth", authRoutes);
 app.use("/post", postRoutes)
