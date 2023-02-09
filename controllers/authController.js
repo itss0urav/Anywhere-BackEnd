@@ -73,8 +73,8 @@ const loginController = asyncHandler(async (req, res) => {
   const refreshToken = generateRefreshTokenToken(foundedUser._id);
 
   res.cookie("jwt", refreshToken, {
-    httpOnly: true, //accessible only by web server
-    secure: true, //https
+    httpOnly: false, //accessible only by web server
+    secure: false, //https
     sameSite: true, //cross-site cookie
     maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
   });

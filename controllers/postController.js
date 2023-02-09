@@ -19,7 +19,7 @@ const createPost = asyncHandler(async (req, res) => {
 
   const response = await Post.create(postObj);
   if (!response) return res.status(500).send("Something went wrong");
-  await Vote.create({postId:response._id,vote:0,userId:[]})
+  await Vote.create({ postId: response._id, vote: 0, userId: [] });
   return res.status(200).json(response);
 });
 
@@ -79,7 +79,26 @@ const updatePost = asyncHandler(async (req, res) => {
     if (!result) return res.status(500).send("Something went wrong");
   }
 
-  return res.status(200).send(result)
+  return res.status(200).send(result);
 });
 
-module.exports = { createPost, updatePost };
+//@desc getting all pots
+//@Route /posts
+//@acess Protected
+//@method GET
+const getPosts = asyncHandler(async (req, res) => {
+
+  try{
+      const posts = await Post.find({}).populate("vote")
+      if(!posts) return res.status(500).send("Something wend wrong0")
+  
+      return res.status(200).send(posts)
+  }
+  catch(error){
+      console.log(error)
+  }
+  
+  })
+  
+
+module.exports = { createPost, updatePost, getPosts };
