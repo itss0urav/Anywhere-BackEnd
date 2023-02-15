@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken")
 
-const generateAccessToken = (id) => {
+const generateAccessToken = (encode) => {
 
-    return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: "15m" })
+    return jwt.sign(encode, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: "1d" })
 
 }
 const generateRefreshTokenToken = (id) => {
