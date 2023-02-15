@@ -69,7 +69,7 @@ const loginController = asyncHandler(async (req, res) => {
   if (!passwordVerified)
     return res.status(401).json({ message: "Incorrect password" });
 
-  const accessToken = generateAccessToken(foundedUser._id);
+  const accessToken = generateAccessToken({id:foundedUser._id, role:"user"});
   const refreshToken = generateRefreshTokenToken(foundedUser._id);
 
   res.cookie("jwt", refreshToken, {
@@ -83,6 +83,7 @@ const loginController = asyncHandler(async (req, res) => {
     message: "Logged in succesfully",
     accessToken,
     refreshToken,
+    username:foundedUser.username
   });
 });
 

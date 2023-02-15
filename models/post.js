@@ -14,13 +14,18 @@ const postModel = new mongoose.Schema(
       type: String,
     },
     vote: {
-      type: mongoose.Types.ObjectId,
+      type: [mongoose.Types.ObjectId],
       ref: "Vote",
+    },
+    imageUrl: {
+      type: String,
+      required: false,
     },
     comments: [
       {
         type: [mongoose.Types.ObjectId],
         ref: "Comment",
+        required:false
       },
     ],
   },
