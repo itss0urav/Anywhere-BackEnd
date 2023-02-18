@@ -1,9 +1,8 @@
-const User = require("../models/User");
 const asyncHandler = require("express-async-handler");
+const User = require("../models/user");
 const { hashPassword, verifyPassword } = require("../configs/hashPassword");
 const {
   generateAccessToken,
-  generateRefreshTokenToken,
 } = require("../configs/authorization/jwtSign");
 
 //@route auth/register
@@ -70,19 +69,12 @@ const loginController = asyncHandler(async (req, res) => {
     return res.status(401).json({ message: "Incorrect password" });
 
   const accessToken = generateAccessToken({id:foundedUser._id, role:"user"});
-  const refreshToken = generateRefreshTokenToken(foundedUser._id);
+  
 
-  res.cookie("jwt", refreshToken, {
-    httpOnly: false, //accessible only by web server
-    secure: false, //https
-    sameSite: true, //cross-site cookie
-    maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
-  });
 
   return res.status(200).json({
     message: "Logged in succesfully",
     accessToken,
-    refreshToken,
     username:foundedUser.username
   });
 });

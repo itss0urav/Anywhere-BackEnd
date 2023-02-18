@@ -16,6 +16,7 @@ const postModel = new mongoose.Schema(
     vote: {
       type: [mongoose.Types.ObjectId],
       ref: "Vote",
+      required:false
     },
     imageUrl: {
       type: String,
@@ -25,9 +26,13 @@ const postModel = new mongoose.Schema(
       {
         type: [mongoose.Types.ObjectId],
         ref: "Comment",
-        required:false
+        required: false,
       },
     ],
+    // category: {
+    //   type: mongoose.Types.ObjectId,
+    //   ref:"Categories"
+    // },
   },
   { timestamps: true }
 );

@@ -7,9 +7,10 @@ const asyncHandler = require("express-async-handler");
 //@route /post
 
 const createPost = asyncHandler(async (req, res) => {
+console.log(req.user)
 
-  console.log(req.body);
-  if (!userId || !title || !description)
+const {title, description} = req.body
+  if (!title || !description)
     return res.status(404).send("Please give required fields");
 
   const response = await Post.create({...req.body,userId:req.user._id});
