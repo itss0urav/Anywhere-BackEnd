@@ -5,13 +5,14 @@ const asyncHandler = require("express-async-handler");
 //@access Protected
 //@route /post
 const upVotePost = asyncHandler(async (req, res) => {
-  const { postId, up, userId } = req.body;
+  const { postId, up } = req.body;
   let result;
-  if (!postId && !userId)
+  if (!postId)
     return res.status(404).send("Please check the request body");
 
   const existingVote = await Vote.findOne({ postId });
-let voteDuplication = existingVote.userId.find(user => user === userId)
+
+let voteDuplication =  existingVote.userId.some(user => user.toHexString() == req.user._id)
 
 if(voteDuplication){
   return res.status(201).send("User already voted to this post");
@@ -23,7 +24,7 @@ if(voteDuplication){
     { postId },
     {
       vote: up ? existingVoteNumber + 1 : existingVoteNumber - 1,
-      $push: { userId: userId },
+      $push: { userId: req.user._id },
     },
     {
       new: true,
