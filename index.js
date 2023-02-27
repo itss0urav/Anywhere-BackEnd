@@ -21,10 +21,10 @@ app.use("/post", postRoutes);
 app.use("/vote", voteRoutes);
 try {
   mongoose.connection.once("open", () => {
-    console.log("Connected to  mongoDb database");
-    app.listen(PORT, () => console.log(`Server started at port ${PORT}`));
+    console.log("Connected to MongoDB database 🚀");
+    app.listen(PORT, () => console.log(`Server started at port ${PORT} 😃`));
   });
 } catch (err) {
-  console.log("Unable to connect to database");
-  throw new Error("Database connection failed");
+  console.log("Unable to connect to database ⚠️");
+  throw new Error("Database connection failed ⚠️");
 }
