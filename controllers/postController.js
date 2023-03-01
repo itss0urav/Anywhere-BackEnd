@@ -96,5 +96,18 @@ const getPosts = asyncHandler(async (req, res) => {
   
   })
   
+  //@desc delete post
 
-module.exports = { createPost, updatePost, getPosts };
+  const deletePost = asyncHandler(async(req, res) => {
+    const { id } = req.params
+console.log(req.params)
+    if(!id) return res.status(401).send("Please give required details")
+
+     const result = await Post.findOneAndDelete({_id:id})
+
+     if(!result) return res.status(500).send("Unable to delete post")
+
+      return res.status(200).send("Sucessfully deleted the post")
+  })
+
+module.exports = { createPost, updatePost, getPosts, deletePost };
