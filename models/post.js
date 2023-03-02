@@ -14,11 +14,15 @@ const postModel = new mongoose.Schema(
       type: String,
     },
     vote: {
-      type: [mongoose.Types.ObjectId],
+      type: mongoose.Types.ObjectId,
       ref: "Vote",
-      required:false
+      required: false,
     },
     imageUrl: {
+      type: String,
+      required: false,
+    },
+    link: {
       type: String,
       required: false,
     },

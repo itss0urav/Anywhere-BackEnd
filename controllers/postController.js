@@ -15,7 +15,10 @@ const {title, description} = req.body
 
   const response = await Post.create({...req.body,userId:req.user._id});
   if (!response) return res.status(500).send("Something went wrong");
-  await Vote.create({ postId: response._id, vote: 0, userId: [] });
+  const vote = await Vote.create({ postId: response._id, vote: 0, userId: [] });
+  await Post.findOneAndUpdate({_id: response._id},{
+    vote:vote._id
+  })
   return res.status(200).json(response);
 });
 
