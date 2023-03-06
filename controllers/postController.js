@@ -1,5 +1,6 @@
 const Post = require("../models/post");
 const Vote = require("../models/vote");
+const User = require("../models/user")
 const asyncHandler = require("express-async-handler");
 
 //@desc creating a new post
@@ -12,7 +13,7 @@ console.log(req.user)
 const {title, description} = req.body
   if (!title || !description)
     return res.status(404).send("Please give required fields");
-
+// const user = await User.findOne({_id:req.user._id})
   const response = await Post.create({...req.body,userId:req.user._id});
   if (!response) return res.status(500).send("Something went wrong");
   const vote = await Vote.create({ postId: response._id, vote: 0, userId: [] });
@@ -88,7 +89,7 @@ const updatePost = asyncHandler(async (req, res) => {
 const getPosts = asyncHandler(async (req, res) => {
 
   try{
-      const posts = await Post.find({}).populate("vote")
+      const posts = await Post.find({}).populate("vote").populate("userId")
       if(!posts) return res.status(500).send("Something wend wrong0")
   
       return res.status(200).send(posts)
