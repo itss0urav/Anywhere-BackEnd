@@ -33,10 +33,9 @@ const postModel = new mongoose.Schema(
         required: false,
       },
     ],
-    // category: {
-    //   type: mongoose.Types.ObjectId,
-    //   ref:"Categories"
-    // },
+   username:{
+    type:String
+   }
   },
   { timestamps: true }
 );

@@ -14,7 +14,7 @@ const {title, description} = req.body
   if (!title || !description)
     return res.status(404).send("Please give required fields");
 // const user = await User.findOne({_id:req.user._id})
-  const response = await Post.create({...req.body,userId:req.user._id});
+  const response = await Post.create({...req.body,userId:req.user._id, username:req.user.name});
   if (!response) return res.status(500).send("Something went wrong");
   const vote = await Vote.create({ postId: response._id, vote: 0, userId: [] });
   await Post.findOneAndUpdate({_id: response._id},{
@@ -88,11 +88,17 @@ const updatePost = asyncHandler(async (req, res) => {
 //@method GET
 const getPosts = asyncHandler(async (req, res) => {
 
+  console.log()
   try{
+    if(Object.keys(req.query).length === 0){
       const posts = await Post.find({}).populate("vote").populate("userId")
       if(!posts) return res.status(500).send("Something wend wrong0")
-  
       return res.status(200).send(posts)
+    }else{
+      const posts = await Post.find(req.query).populate("vote").populate("userId")
+      if(!posts) return res.status(500).send("Something wend wrong0")
+      return res.status(200).send(posts)
+    }
   }
   catch(error){
       console.log(error)
@@ -101,6 +107,8 @@ const getPosts = asyncHandler(async (req, res) => {
   })
   
   //@desc delete post
+  //@method delete
+  //@route /post
 
   const deletePost = asyncHandler(async(req, res) => {
     const { id } = req.params
