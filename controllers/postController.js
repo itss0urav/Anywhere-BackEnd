@@ -109,6 +109,7 @@ const getPosts = asyncHandler(async (req, res) => {
   //@desc delete post
   //@method delete
   //@route /post
+  //acess protected
 
   const deletePost = asyncHandler(async(req, res) => {
     const { id } = req.params
