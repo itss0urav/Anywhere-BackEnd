@@ -7,31 +7,69 @@ const asyncHandler = require("express-async-handler");
 const upVotePost = asyncHandler(async (req, res) => {
   const { postId, up } = req.body;
   let result;
-  if (!postId)
+  if (!postId || !up)
     return res.status(404).send("Please check the request body");
-
   const existingVote = await Vote.findOne({ postId });
-
-let voteDuplication =  existingVote.userId.some(user => user.toHexString() == req.user._id)
-
-if(voteDuplication){
-  return res.status(201).send("User already voted to this post");
-}
-  //If no vote exists for given postId
   let existingVoteNumber = existingVote.vote;
-  //If vpote exists for given postId
-  result = await Vote.findOneAndUpdate(
-    { postId },
-    {
-      vote: up ? existingVoteNumber + 1 : existingVoteNumber - 1,
-      $push: { userId: req.user._id },
-    },
-    {
-      new: true,
-    }
-  );
 
-  return res.status(200).send(result);
-});
+  if (up) {
+    let voteDuplication = existingVote.upVotedUserId.some(
+      (user) => user.toHexString() == req.user._id
+    );
+    if (voteDuplication) {
+      result = await Vote.findOneAndUpdate(
+        { postId },
+        {
+          vote: existingVoteNumber - 1,
+          $pop: { upVotedUserId: req.user._id },
+        },
+        {
+          new: true,
+        }
+      );
+    } else {
+      result = await Vote.findOneAndUpdate(
+        { postId },
+        {
+          vote: existingVoteNumber + 1,
+          $push: { upVotedUserId: req.user._id },
+        },
+        {
+          new: true,
+        }
+      );
+     
+    }
+  } else {
+    let voteDuplication = existingVote.downVotedUserId.some(
+      (user) => user.toHexString() == req.user._id
+    );
+  
+    if(voteDuplication){
+      result = await Vote.findOneAndUpdate(
+        { postId },
+        {
+          vote: existingVoteNumber + 1,
+          $pop: { downVotedUserId: req.user._id },
+        },
+        {
+          new: true,
+        }
+      )
+    }else{
+      result = await Vote.findOneAndUpdate(
+        { postId },
+        {
+          vote: existingVoteNumber - 1,
+          $push: { downVotedUserId: req.user._id },
+        },
+        {
+          new: true,
+        }
+      )
+    }
+  }
+})
+ 
 
 module.exports = { upVotePost };

@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const voteModel = new mongoose.Schema(
   {
-    userId: [
+    upVotedUserId: [
       {
         type: mongoose.Types.ObjectId,
         ref: "User",
@@ -17,6 +17,10 @@ const voteModel = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Post",
     },
+    downVotedUserId:[{
+      type: mongoose.Types.ObjectId,
+      ref: "User"
+    }]
   },
   { timestamps: true }
 );
