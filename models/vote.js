@@ -6,8 +6,7 @@ const voteModel = new mongoose.Schema(
   {
     upVotedUserId: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: "User",
+        type: String
       },
     ],
     vote: {
@@ -18,8 +17,8 @@ const voteModel = new mongoose.Schema(
       ref: "Post",
     },
     downVotedUserId:[{
-      type: mongoose.Types.ObjectId,
-      ref: "User"
+      type: String
+      
     }]
   },
   { timestamps: true }
