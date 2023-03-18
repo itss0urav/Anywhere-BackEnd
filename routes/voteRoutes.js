@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const { upVotePost } = require("../controllers/voteController");
+const { upVotePost, getVoteCount } = require("../controllers/voteController");
 const secure = require("../middlewares/authorization")
-router.post("/",secure, upVotePost);
+router.post("/",secure, upVotePost).get("/",secure, getVoteCount);
 
 module.exports = router;
