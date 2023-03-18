@@ -1,27 +1,29 @@
 const Vote = require("../models/vote");
 const asyncHandler = require("express-async-handler");
-
+const {Types} = require("mongoose")
 //@desc Upvoting post
 //@access Protected
 //@route /post
 const upVotePost = asyncHandler(async (req, res) => {
   const { postId, up } = req.body;
   let result;
-  if (!postId || !up)
+  if (!postId)
     return res.status(404).send("Please check the request body");
   const existingVote = await Vote.findOne({ postId });
   let existingVoteNumber = existingVote.vote;
-
+  let upVotedUserId = existingVote.upVotedUserId
+  let downVotedUserId = existingVote.downVotedUserId
+  
   if (up) {
     let voteDuplication = existingVote.upVotedUserId.some(
-      (user) => user.toHexString() == req.user._id
+      (user) => user == req.user._id.toString()
     );
     if (voteDuplication) {
       result = await Vote.findOneAndUpdate(
         { postId },
         {
           vote: existingVoteNumber - 1,
-          $pop: { upVotedUserId: req.user._id },
+          upVotedUserId:upVotedUserId.filter((id) => id !== req.user._id.toString()),
         },
         {
           new: true,
@@ -32,7 +34,7 @@ const upVotePost = asyncHandler(async (req, res) => {
         { postId },
         {
           vote: existingVoteNumber + 1,
-          $push: { upVotedUserId: req.user._id },
+          upVotedUserId:[...upVotedUserId, req.user._id.toString()],
         },
         {
           new: true,
@@ -42,7 +44,7 @@ const upVotePost = asyncHandler(async (req, res) => {
     }
   } else {
     let voteDuplication = existingVote.downVotedUserId.some(
-      (user) => user.toHexString() == req.user._id
+      (user) => user == req.user._id.toString()
     );
   
     if(voteDuplication){
@@ -50,7 +52,7 @@ const upVotePost = asyncHandler(async (req, res) => {
         { postId },
         {
           vote: existingVoteNumber + 1,
-          $pop: { downVotedUserId: req.user._id },
+          downVotedUserId: downVotedUserId.filter(id => id !== req.user._id.toString()),
         },
         {
           new: true,
@@ -61,7 +63,7 @@ const upVotePost = asyncHandler(async (req, res) => {
         { postId },
         {
           vote: existingVoteNumber - 1,
-          $push: { downVotedUserId: req.user._id },
+          downVotedUserId:[...downVotedUserId, req.user._id.toString()],
         },
         {
           new: true,
@@ -69,6 +71,7 @@ const upVotePost = asyncHandler(async (req, res) => {
       )
     }
   }
+  return res.status(200).send(result)
 })
  
 
