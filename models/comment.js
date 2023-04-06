@@ -17,6 +17,10 @@ const commetModel = new mongoose.Schema({
     ref: "Post",
     required: true,
   },
+  replies:[{
+    userId:{type:mongoose.Types.ObjectId,ref:"User"},
+    content:String,
+  }]
 });
 
 module.exports = mongoose.model("Comment", commetModel);

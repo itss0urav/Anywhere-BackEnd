@@ -1,6 +1,6 @@
 const Post = require("../models/post");
 const Vote = require("../models/vote");
-const User = require("../models/user")
+const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 
 //@desc creating a new post
@@ -8,18 +8,25 @@ const asyncHandler = require("express-async-handler");
 //@route /post
 
 const createPost = asyncHandler(async (req, res) => {
-console.log(req.user)
+  console.log(req.user);
 
-const {title, description} = req.body
+  const { title, description } = req.body;
   if (!title || !description)
     return res.status(404).send("Please give required fields");
-// const user = await User.findOne({_id:req.user._id})
-  const response = await Post.create({...req.body,userId:req.user._id, username:req.user.name});
+  // const user = await User.findOne({_id:req.user._id})
+  const response = await Post.create({
+    ...req.body,
+    userId: req.user._id,
+    username: req.user.name,
+  });
   if (!response) return res.status(500).send("Something went wrong");
   const vote = await Vote.create({ postId: response._id, vote: 0, userId: [] });
-  await Post.findOneAndUpdate({_id: response._id},{
-    vote:vote._id
-  })
+  await Post.findOneAndUpdate(
+    { _id: response._id },
+    {
+      vote: vote._id,
+    }
+  );
   return res.status(200).json(response);
 });
 
@@ -87,40 +94,41 @@ const updatePost = asyncHandler(async (req, res) => {
 //@acess Protected
 //@method GET
 const getPosts = asyncHandler(async (req, res) => {
-
-  console.log()
-  try{
-    if(Object.keys(req.query).length === 0){
-      const posts = await Post.find({}).populate("vote").populate("userId")
-      if(!posts) return res.status(500).send("Something wend wrong0")
-      return res.status(200).send(posts)
-    }else{
-      const posts = await Post.find(req.query).populate("vote").populate("userId")
-      if(!posts) return res.status(500).send("Something wend wrong0")
-      return res.status(200).send(posts)
+  console.log();
+  try {
+    if (Object.keys(req.query).length === 0) {
+      const posts = await Post.find({}).populate("vote").populate("userId");
+      if (!posts) return res.status(500).send("Something wend wrong0");
+      return res.status(200).send(posts);
+    } else {
+      const posts = await Post.find(req.query)
+        .populate("vote")
+        .populate("userId");
+      if (!posts) return res.status(500).send("Something wend wrong0");
+      return res.status(200).send(posts);
     }
+  } catch (error) {
+    console.log(error);
   }
-  catch(error){
-      console.log(error)
-  }
-  
-  })
-  
-  //@desc delete post
-  //@method delete
-  //@route /post
-  //acess protected
+});
 
-  const deletePost = asyncHandler(async(req, res) => {
-    const { id } = req.params
-console.log(req.params)
-    if(!id) return res.status(401).send("Please give required details")
+//@desc delete post
+//@method delete
+//@route /post
+//acess protected
 
-     const result = await Post.findOneAndDelete({_id:id})
+const deletePost = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  console.log(req.params);
+  if (!id) return res.status(401).send("Please give required details");
 
-     if(!result) return res.status(500).send("Unable to delete post")
+  const result = await Post.findOneAndDelete({ _id: id });
 
-      return res.status(200).send("Sucessfully deleted the post")
-  })
+  if (!result) return res.status(500).send("Unable to delete post");
+
+  return res.status(200).send("Sucessfully deleted the post");
+});
+
+
 
 module.exports = { createPost, updatePost, getPosts, deletePost };

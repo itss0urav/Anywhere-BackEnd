@@ -26,6 +26,9 @@ const upVotePost = asyncHandler(async (req, res) => {
           upVotedUserId: upVotedUserId.filter(
             (id) => id !== req.user._id.toString()
           ),
+          downVotedUserId: downVotedUserId.filter(
+            (id) => id !== req.user._id.toString()
+          ),
         },
         {
           new: true,
@@ -59,6 +62,7 @@ const upVotePost = asyncHandler(async (req, res) => {
           downVotedUserId: downVotedUserId.filter(
             (id) => id !== req.user._id.toString()
           ),
+          upVotedUserId:upVotedUserId.filter((userId) => userId !== req.user._id.toString())
         },
         {
           new: true,
