@@ -5,8 +5,8 @@ const mongoose = require("mongoose");
 const { connectDb } = require("./configs/db");
 const postRoutes = require("./routes/postRoutes");
 const voteRoutes = require("./routes/voteRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 const cors = require("cors");
-const corsOptions = require("./configs/authorization/corsOptions");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const PORT = process.env.PORT || 5000;
@@ -19,6 +19,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/post", postRoutes);
 app.use("/vote", voteRoutes);
+app.use("/comment", commentRoutes);
 try {
   mongoose.connection.once("open", () => {
     console.log("Connected to MongoDB database 🚀");

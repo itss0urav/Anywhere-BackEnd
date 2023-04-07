@@ -17,7 +17,7 @@ const createPost = asyncHandler(async (req, res) => {
   const response = await Post.create({
     ...req.body,
     userId: req.user._id,
-    username: req.user.name,
+    username: req.user.username,
   });
   if (!response) return res.status(500).send("Something went wrong");
   const vote = await Vote.create({ postId: response._id, vote: 0, userId: [] });
