@@ -9,7 +9,7 @@ const secure = asyncHandler(async (req, res, next) => {
 
     let token
 
-    if (!req.headers || !req.headers.authorization.startsWith('Bearer')) {
+    if (!req.headers || !req.headers.authorization?.startsWith('Bearer')) {
         res.status(401)
         throw new Error("Unauthorized, Token is not provided")
     }
