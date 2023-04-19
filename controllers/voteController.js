@@ -35,10 +35,12 @@ const upVotePost = asyncHandler(async (req, res) => {
         }
       );
     } else {
+      const isDownVotted = downVotedUserId.some((userId) => userId === req.user._id.toString())
+      let newVote = isDownVotted ? existingVoteNumber + 2 : existingVoteNumber + 1
       result = await Vote.findOneAndUpdate(
         { postId },
         {
-          vote: existingVoteNumber + 1,
+          vote: newVote,
           upVotedUserId: [...upVotedUserId, req.user._id.toString()],
           downVotedUserId: downVotedUserId.filter(
             (id) => id !== req.user._id.toString()
@@ -69,10 +71,12 @@ const upVotePost = asyncHandler(async (req, res) => {
         }
       );
     } else {
+      const isUpVotted = upVotedUserId.some((userId) => userId === req.user._id.toString())
+      let newVote = isUpVotted ? existingVoteNumber - 2 : existingVoteNumber - 1
       result = await Vote.findOneAndUpdate(
         { postId },
         {
-          vote: existingVoteNumber - 1,
+          vote: newVote,
           downVotedUserId: [...downVotedUserId, req.user._id.toString()],
           upVotedUserId: upVotedUserId.filter(
             (id) => id !== req.user._id.toString()
