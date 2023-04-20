@@ -20,7 +20,7 @@ const createPost = asyncHandler(async (req, res) => {
     username: req.user.username,
   });
   if (!response) return res.status(500).send("Something went wrong");
-  const vote = await Vote.create({ postId: response._id, vote: 0, userId: [] });
+  const vote = await Vote.create({ resourceId: response._id, vote: 0});
   await Post.findOneAndUpdate(
     { _id: response._id },
     {
