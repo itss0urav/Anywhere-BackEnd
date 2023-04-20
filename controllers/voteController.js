@@ -6,10 +6,10 @@ const { Types } = require("mongoose");
 //@access Protected
 //@route /post
 const upVotePost = asyncHandler(async (req, res) => {
-  const { postId, up } = req.body;
+  const { resourceId, up } = req.body;
   let result;
-  if (!postId) return res.status(404).send("Please check the request body");
-  const existingVote = await Vote.findOne({ postId });
+  if (!resourceId) return res.status(404).send("Please check the request body");
+  const existingVote = await Vote.findOne({ resourceId });
   let existingVoteNumber = existingVote.vote;
   let upVotedUserId = existingVote.upVotedUserId;
   let downVotedUserId = existingVote.downVotedUserId;
@@ -20,7 +20,7 @@ const upVotePost = asyncHandler(async (req, res) => {
     );
     if (voteDuplication) {
       result = await Vote.findOneAndUpdate(
-        { postId },
+        { resourceId },
         {
           vote: existingVoteNumber - 1,
           upVotedUserId: upVotedUserId.filter(
@@ -38,7 +38,7 @@ const upVotePost = asyncHandler(async (req, res) => {
       const isDownVotted = downVotedUserId.some((userId) => userId === req.user._id.toString())
       let newVote = isDownVotted ? existingVoteNumber + 2 : existingVoteNumber + 1
       result = await Vote.findOneAndUpdate(
-        { postId },
+        { resourceId },
         {
           vote: newVote,
           upVotedUserId: [...upVotedUserId, req.user._id.toString()],
@@ -58,7 +58,7 @@ const upVotePost = asyncHandler(async (req, res) => {
 
     if (voteDuplication) {
       result = await Vote.findOneAndUpdate(
-        { postId },
+        { resourceId },
         {
           vote: existingVoteNumber + 1,
           downVotedUserId: downVotedUserId.filter(
@@ -74,7 +74,7 @@ const upVotePost = asyncHandler(async (req, res) => {
       const isUpVotted = upVotedUserId.some((userId) => userId === req.user._id.toString())
       let newVote = isUpVotted ? existingVoteNumber - 2 : existingVoteNumber - 1
       result = await Vote.findOneAndUpdate(
-        { postId },
+        { resourceId },
         {
           vote: newVote,
           downVotedUserId: [...downVotedUserId, req.user._id.toString()],

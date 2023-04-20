@@ -12,7 +12,7 @@ const voteModel = new mongoose.Schema(
     vote: {
       type: Number,
     },
-    postId: {
+    resourceId: {
       type: mongoose.Types.ObjectId,
       ref: "Post",
     },
