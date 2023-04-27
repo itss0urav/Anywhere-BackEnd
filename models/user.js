@@ -16,6 +16,10 @@ const userModel = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isBanned:{
+    type:Boolean,
+    required:false
+  }
 },{timestamps:true});
 
 module.exports = mongoose.model("User", userModel);

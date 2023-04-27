@@ -7,6 +7,7 @@ const postRoutes = require("./routes/postRoutes");
 const voteRoutes = require("./routes/voteRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const userDataRoutes = require("./routes/userDataRoutes")
+const userRoutes = require("./routes/user")
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
@@ -22,6 +23,7 @@ app.use("/post", postRoutes);
 app.use("/vote", voteRoutes);
 app.use("/comment", commentRoutes);
 app.use("/userData", userDataRoutes);
+app.use("/user", userRoutes);
 try {
   mongoose.connection.once("open", () => {
     console.log("Connected to MongoDB database 🚀");
