@@ -33,9 +33,13 @@ const postModel = new mongoose.Schema(
         required: false,
       },
     ],
-   username:{
-    type:String
-   }
+    username: {
+      type: String,
+    },
+    isNfsw: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
