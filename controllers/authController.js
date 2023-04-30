@@ -11,7 +11,7 @@ const Moderator = require("../models/moderator")
 
 const registerUser = asyncHandler(async (req, res) => {
   console.log(req.body);
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
   if (username && email && password) {
     //Checking duplicate user by email
@@ -31,6 +31,7 @@ const registerUser = asyncHandler(async (req, res) => {
         username: username,
         email: email,
         password: hashedPassword,
+        role
       };
 
       //Creating new user

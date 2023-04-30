@@ -2,20 +2,15 @@ const mongoose = require("mongoose");
 
 //User schema
 
-const moderatorModel = new mongoose.Schema({
-  username: {
-    type: String,
-    require: true,
+const moderatorModel = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      require: true,
+      unique: true,
+    },
   },
-  email: {
-    type: String,
-    require: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-},{timestamps:true});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Moderator", moderatorModel);
