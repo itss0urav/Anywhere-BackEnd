@@ -101,7 +101,11 @@ const getPosts = asyncHandler(async (req, res) => {
       if (!posts) return res.status(500).send("Something wend wrong0");
       return res.status(200).send(posts);
     } else {
-      const posts = await Post.find(req.query)
+      const mongoQuery = {} 
+      const entries = Object.entries(req.query)
+      const searchTerm = entries[0][1]
+      mongoQuery[entries[0][0]] = new RegExp("^" + searchTerm, "i")
+      const posts = await Post.find(mongoQuery)
         .populate("vote")
         .populate("userId");
       if (!posts) return res.status(500).send("Something wend wrong0");
