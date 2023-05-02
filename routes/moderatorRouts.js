@@ -2,9 +2,6 @@ const { createModerator, deleteModerator } = require("../controllers/moderatorCo
 
 const router = require("express").Router()
 
-
-
-
 router.route("/").post(createModerator)
 router.delete("/:email",deleteModerator)
 
