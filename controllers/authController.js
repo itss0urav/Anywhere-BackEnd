@@ -76,7 +76,8 @@ const loginController = asyncHandler(async (req, res) => {
     message: "Logged in succesfully",
     accessToken,
     username:foundedUser.username,
-    userId:foundedUser._id
+    userId:foundedUser._id,
+    role:foundedUser.role
   });
 });
 

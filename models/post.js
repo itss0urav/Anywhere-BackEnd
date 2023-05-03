@@ -37,7 +37,7 @@ const postModel = new mongoose.Schema(
       type: String,
     },
     isNfsw: {
-      type: String,
+      type: Boolean,
       required: false,
     },
   },
