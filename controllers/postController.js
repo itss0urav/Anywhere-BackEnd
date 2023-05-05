@@ -101,16 +101,15 @@ const getPosts = asyncHandler(async (req, res) => {
       if (!posts) return res.status(500).send("Something wend wrong0");
       return res.status(200).send(posts);
     } else {
-      const mongoQuery = {} 
-      if(JSON.parse(req.query.isPrefix)){
+      let mongoQuery = {} 
+      if(req.query?.isPrefix){
       delete req.query["isPrefix"]
       const entries = Object.entries(req.query)
       const searchTerm = entries[0][1]
       mongoQuery[entries[0][0]] = new RegExp("^" + searchTerm, "i")
       }else{
         mongoQuery = req.query
-      }
-      
+      } 
       const posts = await Post.find(mongoQuery)
         .populate("vote")
         .populate("userId");
