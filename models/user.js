@@ -24,6 +24,9 @@ const userModel = new mongoose.Schema({
     type:String,
     required:false
   },
+  isVerified:{
+    type:Boolean
+  }
 },{timestamps:true});
 
 module.exports = mongoose.model("User", userModel);
