@@ -13,4 +13,19 @@ const deleteUser = asyncHandler(async (req, res) => {
     return res.status(200).send(result)
 })
 
-module.exports = {getUsers, deleteUser}
+
+
+const updateUser = asyncHandler(async (req, res) => {
+
+    const { userId } = req.body
+
+    delete req.body["userId"]
+
+    const user = await User.findByIdAndUpdate(userId,req.body)
+
+
+    return res.status(200).send(user)
+
+})
+
+module.exports = {getUsers, deleteUser, updateUser}

@@ -1,6 +1,7 @@
 const Post = require("../models/post");
 const Vote = require("../models/vote");
 const User = require("../models/user");
+const Category = require("../models/Categories")
 const asyncHandler = require("express-async-handler");
 
 //@desc creating a new post
@@ -10,7 +11,7 @@ const asyncHandler = require("express-async-handler");
 const createPost = asyncHandler(async (req, res) => {
   console.log(req.user);
 
-  const { title, description } = req.body;
+  const { title, description, category } = req.body;
   if (!title || !description)
     return res.status(404).send("Please give required fields");
   // const user = await User.findOne({_id:req.user._id})
@@ -27,6 +28,10 @@ const createPost = asyncHandler(async (req, res) => {
       vote: vote._id,
     }
   );
+  const duplicateCategory = await Category.find({name:new RegExp(category, "i")})
+  if(duplicateCategory.length === 0){
+    await Category.create({name:category})
+  }
   return res.status(200).json(response);
 });
 

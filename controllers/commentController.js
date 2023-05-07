@@ -31,4 +31,10 @@ const { postId } = req.query;
 
 })
 
-module.exports = { createComment, getComments };
+
+const deleteComment = asyncHandler(async (req, res) => {
+  const {id} = req.params
+  await Comment.findByIdAndDelete(id)
+  return res.status(200).send("Comment successfully deleted")
+})
+module.exports = { createComment, getComments, deleteComment };

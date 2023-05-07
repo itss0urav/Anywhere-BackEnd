@@ -1,10 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/user");
 const { hashPassword, verifyPassword } = require("../configs/hashPassword");
-const {
-  generateAccessToken,
-} = require("../configs/authorization/jwtSign");
-const Moderator = require("../models/moderator")
+const { generateAccessToken } = require("../configs/authorization/jwtSign");
+const Moderator = require("../models/moderator");
 //@route auth/register
 //@desc Creating a new user
 //@acess public
@@ -31,7 +29,7 @@ const registerUser = asyncHandler(async (req, res) => {
         username: username,
         email: email,
         password: hashedPassword,
-        role
+        role,
       };
 
       //Creating new user
@@ -68,16 +66,21 @@ const loginController = asyncHandler(async (req, res) => {
 
   if (!passwordVerified)
     return res.status(401).json({ message: "Incorrect password" });
+  if (foundedUser.isBanned === true) {
+    return res.status(201).send("User is banned");
+  }
+  const isModerator = await Moderator.findOne({ email });
+  const accessToken = generateAccessToken({
+    id: foundedUser._id,
+    role: isModerator ? "moderator" : "user",
+  });
 
-    const isModerator = await Moderator.findOne({email})
-    const accessToken = generateAccessToken({id:foundedUser._id, role:isModerator ? "moderator" : "user"});
-  
   return res.status(200).json({
     message: "Logged in succesfully",
     accessToken,
-    username:foundedUser.username,
-    userId:foundedUser._id,
-    role:foundedUser.role
+    username: foundedUser.username,
+    userId: foundedUser._id,
+    role: foundedUser.role,
   });
 });
 
