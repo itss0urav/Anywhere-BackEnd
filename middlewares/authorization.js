@@ -1,45 +1,40 @@
-const jwt = require('jsonwebtoken')
-const asyncHandler = require("express-async-handler")
-const User = require("../models/user")
-const Moderator = require("../models/moderator")
+const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
+const User = require("../models/user");
+const Moderator = require("../models/moderator");
 
 //@desc Middleware for protected routes
 
 const secure = asyncHandler(async (req, res, next) => {
+  let token;
 
-    let token
+  if (!req.headers || !req.headers.authorization?.startsWith("Bearer")) {
+    res.status(401);
+    throw new Error("Unauthorized, Token is not provided");
+  }
 
-    if (!req.headers || !req.headers.authorization?.startsWith('Bearer')) {
-        res.status(401)
-        throw new Error("Unauthorized, Token is not provided")
+  try {
+    token = req.headers.authorization.split(" ")[1];
+
+    if (!token) {
+      res.status(401);
+      throw new Error("Unauthorized, Token is not provided");
     }
+    //Decoding the provided token
 
-    try {
-        token = req.headers.authorization.split(" ")[1]
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
 
-        if (!token) {
-            res.status(401)
-            throw new Error("Unauthorized, Token is not provided")
-        }
-        //Decoding the provided token
+    //Acessing user data using decoded token
 
-        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY)
+    req.user = await User.findOne({ _id: decodedToken.id }).select("-password");
+    req.role = decodedToken.role;
 
-        //Acessing user data using decoded token
+    next();
+  } catch (err) {
+    console.log(err);
+    res.status(401);
+    throw new Error("Unauthorized");
+  }
+});
 
-        req.user = await User.findOne({ _id: decodedToken.id }).select("-password")
-        req.role = decodedToken.role
-
-        next()
-
-    } catch (err) {
-
-        console.log(err)
-        res.status(401)
-        throw new Error("Unauthorized")
-    }
-
-
-})
-
-module.exports = secure
+module.exports = secure;

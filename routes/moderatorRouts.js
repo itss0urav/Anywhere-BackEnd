@@ -1,8 +1,11 @@
-const { createModerator, deleteModerator } = require("../controllers/moderatorController")
+const {
+  createModerator,
+  deleteModerator,
+} = require("../controllers/moderatorController");
 
-const router = require("express").Router()
+const router = require("express").Router();
 
-router.route("/").post(createModerator)
-router.delete("/:email",deleteModerator)
+router.route("/").post(createModerator);
+router.delete("/:email", deleteModerator);
 
-module.exports = router
+module.exports = router;

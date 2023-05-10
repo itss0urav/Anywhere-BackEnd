@@ -42,7 +42,7 @@ const postModel = new mongoose.Schema(
     },
     category: {
       type: String,
-    }
+    },
   },
   { timestamps: true }
 );

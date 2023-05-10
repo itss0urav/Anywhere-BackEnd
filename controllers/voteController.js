@@ -35,8 +35,12 @@ const upVotePost = asyncHandler(async (req, res) => {
         }
       );
     } else {
-      const isDownVotted = downVotedUserId.some((userId) => userId === req.user._id.toString())
-      let newVote = isDownVotted ? existingVoteNumber + 2 : existingVoteNumber + 1
+      const isDownVotted = downVotedUserId.some(
+        (userId) => userId === req.user._id.toString()
+      );
+      let newVote = isDownVotted
+        ? existingVoteNumber + 2
+        : existingVoteNumber + 1;
       result = await Vote.findOneAndUpdate(
         { resourceId },
         {
@@ -64,15 +68,21 @@ const upVotePost = asyncHandler(async (req, res) => {
           downVotedUserId: downVotedUserId.filter(
             (id) => id !== req.user._id.toString()
           ),
-          upVotedUserId:upVotedUserId.filter((userId) => userId !== req.user._id.toString())
+          upVotedUserId: upVotedUserId.filter(
+            (userId) => userId !== req.user._id.toString()
+          ),
         },
         {
           new: true,
         }
       );
     } else {
-      const isUpVotted = upVotedUserId.some((userId) => userId === req.user._id.toString())
-      let newVote = isUpVotted ? existingVoteNumber - 2 : existingVoteNumber - 1
+      const isUpVotted = upVotedUserId.some(
+        (userId) => userId === req.user._id.toString()
+      );
+      let newVote = isUpVotted
+        ? existingVoteNumber - 2
+        : existingVoteNumber - 1;
       result = await Vote.findOneAndUpdate(
         { resourceId },
         {

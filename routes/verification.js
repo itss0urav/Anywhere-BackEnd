@@ -1,9 +1,14 @@
-const router = require("express").Router()
-const {getVerificationRequests, createVerificationRequests, updateApprovalState} = require("../controllers/verificationController")
+const router = require("express").Router();
+const {
+  getVerificationRequests,
+  createVerificationRequests,
+  updateApprovalState,
+} = require("../controllers/verificationController");
 
-router.route("/")
-.get(getVerificationRequests)
-.post(createVerificationRequests)
-.patch(updateApprovalState)
+router
+  .route("/")
+  .get(getVerificationRequests)
+  .post(createVerificationRequests)
+  .patch(updateApprovalState);
 
-module.exports = router
+module.exports = router;

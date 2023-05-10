@@ -6,15 +6,15 @@ const reportModel = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Types.ObjectId,
-      ref:"User"
+      ref: "User",
     },
     postId: {
       type: mongoose.Types.ObjectId,
-      ref:"Post"
+      ref: "Post",
     },
-    reason:{
-      type:String
-    }
+    reason: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

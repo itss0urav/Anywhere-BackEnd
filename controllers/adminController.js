@@ -11,7 +11,8 @@ const adminLogin = asyncHandler(async (req, res) => {
   const foundAdmin = await Admin.findOne({ email });
   const verifyPassword = foundAdmin?.password === password;
 
-  if(!verifyPassword) return res.status(400).send("Unauthorized, incorrect password or email")
+  if (!verifyPassword)
+    return res.status(400).send("Unauthorized, incorrect password or email");
 
   return res.status(200).send(foundAdmin);
 });

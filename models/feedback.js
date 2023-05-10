@@ -15,9 +15,9 @@ const feedBackModel = new mongoose.Schema({
   description: {
     type: String,
   },
-  rating:{
-    type:Number
-  }
+  rating: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model("Feedback", feedBackModel);

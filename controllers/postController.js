@@ -1,7 +1,7 @@
 const Post = require("../models/post");
 const Vote = require("../models/vote");
 const User = require("../models/user");
-const Category = require("../models/Categories")
+const Category = require("../models/Categories");
 const asyncHandler = require("express-async-handler");
 
 //@desc creating a new post
@@ -21,16 +21,18 @@ const createPost = asyncHandler(async (req, res) => {
     username: req.user.username,
   });
   if (!response) return res.status(500).send("Something went wrong");
-  const vote = await Vote.create({ resourceId: response._id, vote: 0});
+  const vote = await Vote.create({ resourceId: response._id, vote: 0 });
   await Post.findOneAndUpdate(
     { _id: response._id },
     {
       vote: vote._id,
     }
   );
-  const duplicateCategory = await Category.find({name:new RegExp(category, "i")})
-  if(duplicateCategory.length === 0){
-    await Category.create({name:category})
+  const duplicateCategory = await Category.find({
+    name: new RegExp(category, "i"),
+  });
+  if (duplicateCategory.length === 0) {
+    await Category.create({ name: category });
   }
   return res.status(200).json(response);
 });
@@ -106,15 +108,15 @@ const getPosts = asyncHandler(async (req, res) => {
       if (!posts) return res.status(500).send("Something wend wrong0");
       return res.status(200).send(posts);
     } else {
-      let mongoQuery = {} 
-      if(req.query?.isPrefix){
-      delete req.query["isPrefix"]
-      const entries = Object.entries(req.query)
-      const searchTerm = entries[0][1]
-      mongoQuery[entries[0][0]] = new RegExp("^" + searchTerm, "i")
-      }else{
-        mongoQuery = req.query
-      } 
+      let mongoQuery = {};
+      if (req.query?.isPrefix) {
+        delete req.query["isPrefix"];
+        const entries = Object.entries(req.query);
+        const searchTerm = entries[0][1];
+        mongoQuery[entries[0][0]] = new RegExp("^" + searchTerm, "i");
+      } else {
+        mongoQuery = req.query;
+      }
       const posts = await Post.find(mongoQuery)
         .populate("vote")
         .populate("userId");
@@ -142,7 +144,5 @@ const deletePost = asyncHandler(async (req, res) => {
 
   return res.status(200).send("Sucessfully deleted the post");
 });
-
-
 
 module.exports = { createPost, updatePost, getPosts, deletePost };
