@@ -1,15 +1,20 @@
 const mongoose = require("mongoose");
 
-//User schema
+//Report schema
 
 const reportModel = new mongoose.Schema(
   {
     userId: {
-      type: String,
+      type: mongoose.Types.ObjectId,
+      ref:"User"
     },
     postId: {
-      type: String,
+      type: mongoose.Types.ObjectId,
+      ref:"Post"
     },
+    reason:{
+      type:String
+    }
   },
   { timestamps: true }
 );

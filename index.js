@@ -6,13 +6,14 @@ const { connectDb } = require("./configs/db");
 const postRoutes = require("./routes/postRoutes");
 const voteRoutes = require("./routes/voteRoutes");
 const commentRoutes = require("./routes/commentRoutes");
-const userDataRoutes = require("./routes/userDataRoutes")
-const userRoutes = require("./routes/user")
-const adminRoutes = require("./routes/adminRoutes")
-const moderatorRoutes = require("./routes/moderatorRouts")
-const verificationRequests = require("./routes/verification")
-const categoryRoutes = require("./routes/categoryRoutes")
-const feedBackRoutes = require("./routes/feedback")
+const userDataRoutes = require("./routes/userDataRoutes");
+const userRoutes = require("./routes/user");
+const adminRoutes = require("./routes/adminRoutes");
+const moderatorRoutes = require("./routes/moderatorRouts");
+const verificationRequests = require("./routes/verification");
+const categoryRoutes = require("./routes/categoryRoutes");
+const feedBackRoutes = require("./routes/feedback");
+const reportRoutes = require("./routes/reportRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
@@ -30,10 +31,11 @@ app.use("/comment", commentRoutes);
 app.use("/userData", userDataRoutes);
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
-app.use("/moderator",moderatorRoutes );
-app.use("/verification",verificationRequests );
-app.use("/category",categoryRoutes );
-app.use("/feedback", feedBackRoutes)
+app.use("/moderator", moderatorRoutes);
+app.use("/verification", verificationRequests);
+app.use("/category", categoryRoutes);
+app.use("/feedback", feedBackRoutes);
+app.use("/report", reportRoutes);
 try {
   mongoose.connection.once("open", () => {
     console.log("Connected to MongoDB database 🚀");

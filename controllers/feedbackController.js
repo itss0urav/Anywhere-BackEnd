@@ -16,6 +16,12 @@ const getFeedbacks = asyncHandler(async (req, res) => {
 
     return res.status(200).send(feedbacks)
 })
+const deleteFeedBack = asyncHandler(async (req, res) => {
+
+    const deleted = await Feedback.findByIdAndDelete(req.params.id)
+
+    return res.status(200).send(deleted)
+})
 
 
-module.exports = {createFeedback, getFeedbacks}
+module.exports = {createFeedback, getFeedbacks, deleteFeedBack}
