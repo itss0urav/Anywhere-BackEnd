@@ -81,7 +81,7 @@ const loginController = asyncHandler(async (req, res) => {
     username: foundedUser.username,
     userId: foundedUser._id,
     role: foundedUser.role,
-    email:foundedUser.email
+    email: foundedUser.email,
   });
 });
 
