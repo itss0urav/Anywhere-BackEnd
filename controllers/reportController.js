@@ -23,6 +23,12 @@ const getReportedPosts = asyncHandler(async (req, res) => {
   if (!response) return res.status(500).send("Somethig wend wrong");
   return res.status(200).send(result);
 });
+
+const getReportedPostForAdmin = asyncHandler(async(req, res) => {
+  const response = await Report.find({}).populate("userId").populate("postId")
+  return res.status(200).send(response)
+})
+
 const deleteReport = asyncHandler(async (req, res) => {
   const { postId } = req.params;
   const response = await Report.deleteMany({ postId });
@@ -32,4 +38,4 @@ const deleteReport = asyncHandler(async (req, res) => {
   return res.status(200).send(response);
 });
 
-module.exports = { createReport, getReportedPosts, deleteReport };
+module.exports = { createReport, getReportedPosts, deleteReport, getReportedPostForAdmin };

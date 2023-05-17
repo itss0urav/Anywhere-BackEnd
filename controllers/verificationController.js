@@ -18,12 +18,11 @@ const createVerificationRequests = asyncHandler(async (req, res) => {
 //controller for updating the approval state
 
 const updateApprovalState = asyncHandler(async (req, res) => {
-  const { _id } = req.body;
+  const { _id, isApproved } = req.body;
   delete req.body["_id"];
   const result = await Verification.findByIdAndUpdate(_id, req.body);
   return res.status(200).send(result);
 });
-
 
 
 module.exports = {
