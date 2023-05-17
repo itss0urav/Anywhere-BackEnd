@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Report = require("../models/Report");
-
+const Post = require("../models/post");
 const createReport = asyncHandler(async (req, res) => {
   const response = await Report.create(req.body);
 
@@ -9,11 +9,19 @@ const createReport = asyncHandler(async (req, res) => {
   return res.status(200).send(response);
 });
 const getReportedPosts = asyncHandler(async (req, res) => {
-  const response = await Report.find({}).populate("postId").populate("userId");
-
+  let result = [];
+  const response = await Report.find({}).populate("userId");
+  for (let report of response) {
+    const postId = report.postId.toString();
+    const clonedReport = JSON.parse(JSON.stringify(report));
+    const postInfo = await Post.find({ _id: postId })
+      .populate("vote")
+      .populate("userId");
+    clonedReport.postId = JSON.parse(JSON.stringify(postInfo));
+    result.push(clonedReport);
+  }
   if (!response) return res.status(500).send("Somethig wend wrong");
-
-  return res.status(200).send(response);
+  return res.status(200).send(result);
 });
 const deleteReport = asyncHandler(async (req, res) => {
   const { postId } = req.params;

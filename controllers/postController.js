@@ -21,7 +21,7 @@ const createPost = asyncHandler(async (req, res) => {
     username: req.user.username,
   });
   if (!response) return res.status(500).send("Something went wrong");
-  const vote = await Vote.create({ resourceId: response._id, vote: 0 });
+  const vote = await Vote.create({ resourceId: response._id, vote: 0, isPost:true });
   await Post.findOneAndUpdate(
     { _id: response._id },
     {
@@ -145,4 +145,21 @@ const deletePost = asyncHandler(async (req, res) => {
   return res.status(200).send("Sucessfully deleted the post");
 });
 
-module.exports = { createPost, updatePost, getPosts, deletePost };
+//Get trending posts
+
+const getTrendingPosts = asyncHandler(async (req, res) => {
+  try{
+    const allVotes = await Vote.find({ isPost: true }).sort({vote:"desc"}).populate("resourceId")
+    return res.status(200).send(allVotes);
+  }catch(error){
+    console.log(error)
+  }
+});
+
+module.exports = {
+  createPost,
+  updatePost,
+  getPosts,
+  deletePost,
+  getTrendingPosts,
+};

@@ -19,13 +19,12 @@ const createVerificationRequests = asyncHandler(async (req, res) => {
 
 const updateApprovalState = asyncHandler(async (req, res) => {
   const { _id } = req.body;
-
   delete req.body["_id"];
-
   const result = await Verification.findByIdAndUpdate(_id, req.body);
-
   return res.status(200).send(result);
 });
+
+
 
 module.exports = {
   getVerificationRequests,
