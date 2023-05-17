@@ -21,7 +21,11 @@ const voteModel = new mongoose.Schema(
         type: String,
       },
     ],
+    isPost: {
+      type: String,
+    },
   },
+
   { timestamps: true }
 );
 

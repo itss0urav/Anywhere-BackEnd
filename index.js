@@ -14,6 +14,7 @@ const verificationRequests = require("./routes/verification");
 const categoryRoutes = require("./routes/categoryRoutes");
 const feedBackRoutes = require("./routes/feedback");
 const reportRoutes = require("./routes/reportRoutes");
+const overviewRoutes = require("./routes/overviewRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
@@ -36,6 +37,7 @@ app.use("/verification", verificationRequests);
 app.use("/category", categoryRoutes);
 app.use("/feedback", feedBackRoutes);
 app.use("/report", reportRoutes);
+app.use("/overview", overviewRoutes);
 try {
   mongoose.connection.once("open", () => {
     console.log("Connected to MongoDB database 🚀");

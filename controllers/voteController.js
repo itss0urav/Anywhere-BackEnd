@@ -110,4 +110,12 @@ const getVoteCount = asyncHandler(async (req, res) => {
   return res.status(200).send({ voteCount: voteCount });
 });
 
-module.exports = { upVotePost, getVoteCount };
+
+const getVotes = asyncHandler(async (req, res) => {
+const {resourceId} = req.query
+  const votes = await Vote.find({resourceId})
+  return res.status(200).send(votes)
+})
+
+
+module.exports = { upVotePost, getVoteCount, getVotes };
