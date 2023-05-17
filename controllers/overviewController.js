@@ -4,6 +4,9 @@ const Comment = require("../models/comment");
 
 
 //Get Most viewed commment from the comment based on vote
+
+
+
 const getTopComments = asyncHandler(async (req, res) => {
   const { postId } = req.params;
   const comments = await Comment.find({ postId }).populate("userId");
