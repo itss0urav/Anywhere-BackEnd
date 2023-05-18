@@ -1,3 +1,5 @@
+//creates a token valid for the specified time and needs to login after
+
 const jwt = require("jsonwebtoken");
 
 const generateAccessToken = (encode) => {
