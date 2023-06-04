@@ -40,7 +40,9 @@ app.use("/report", reportRoutes);
 app.use("/overview", overviewRoutes);
 try {
   mongoose.connection.once("open", () => {
+    console.log("GitHub: https://github.com/itss0urav");
     console.log("Connected to MongoDB database 🚀");
+
     app.listen(PORT, () => console.log(`Server started at port ${PORT} 😃`));
   });
 } catch (err) {
